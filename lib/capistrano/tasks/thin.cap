@@ -7,7 +7,8 @@ namespace :thin do
       on roles(fetch(:thin_roles, :app)), in: :sequence, wait: 5 do
         within current_path do
           config_file = fetch(:thin_config_path, "config/thin/#{fetch(:stage)}.yml")
-          execute :bundle, "exec thin #{command} -C #{config_file}"
+          rackup_file = fetch(:thin_rackup_file, "config.ru")
+          execute :bundle, "exec thin #{command} -R #{rackup_file} -C #{config_file}"
         end
       end
     end
